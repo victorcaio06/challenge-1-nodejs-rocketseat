@@ -83,7 +83,14 @@ app.put('/todos/:id', checkExistsUserAccount, verifyTodoId, (req, res) => {
     title: title,
     deadline: new Date(deadline),
   };
-  res.status(200).json(searchTodosId);
+  return res.status(200).json(searchTodosId);
+});
+
+app.patch('/todos/:id/done', checkExistsUserAccount, verifyTodoId, (req, res) => {
+  const {searchTodosId} = req;
+  searchTodosId.done = !searchTodosId.done;
+
+  return res.status(204).send();
 });
 
 module.exports = app;
