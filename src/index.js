@@ -86,9 +86,21 @@ app.put('/todos/:id', checkExistsUserAccount, verifyTodoId, (req, res) => {
   return res.status(200).json(searchTodosId);
 });
 
-app.patch('/todos/:id/done', checkExistsUserAccount, verifyTodoId, (req, res) => {
-  const {searchTodosId} = req;
-  searchTodosId.done = !searchTodosId.done;
+app.patch(
+  '/todos/:id/done',
+  checkExistsUserAccount,
+  verifyTodoId,
+  (req, res) => {
+    const { searchTodosId } = req;
+    searchTodosId.done = !searchTodosId.done;
+
+    return res.status(204).send();
+  }
+);
+
+app.delete('/todos/:id', checkExistsUserAccount, (req, res) => {
+  const {searchUsername} = req;
+  users.splice(searchUsername, 1);
 
   return res.status(204).send();
 });
