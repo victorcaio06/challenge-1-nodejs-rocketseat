@@ -43,4 +43,17 @@ app.get('/todos', checkExistsUserAccount, (req, res) => {
   return res.send(searchUsername.todos);
 });
 
+app.post('/todos', checkExistsUserAccount, (req, res) => {
+  const { searchUsername } = req;
+  const { title, deadline } = req.body;
+  searchUsername.todos.push({
+    id: uuidv4(),
+    title,
+    done: false,
+    deadline: new Date(deadline),
+    create_at: new Date(),
+  });
+  return res.status(200).json(searchUsername.todos);
+});
+
 module.exports = app;
