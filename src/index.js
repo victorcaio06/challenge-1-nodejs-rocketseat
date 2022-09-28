@@ -20,7 +20,9 @@ function checkExistsUserAccount(req, res, next) {}
 app.use(cors());
 app.use(express.json());
 
-
+app.get('/getAll', (req, res) => {
+  return res.json(users);
+});
 
 app.post('/users', checkValidAccount, (req, res) => {
   const { name, username } = req.body;
