@@ -25,6 +25,21 @@ function checkExistsUserAccount(req, res, next) {
   return next();
 }
 
+function verifyIdTodos(req, res, next) {
+  const { username } = req.headers;
+  const { id } = req.params;
+
+  const searchUsername = users.find((users) => users.username === username);
+  const searchTodosId = searchUsername.todos.find(
+    (searchTodosId) => searchTodosId.id === id
+  );
+  if (!searchTodosId)
+    return res.status(404).json({ error: 'Todo list not found' });
+
+  req.searchTodosId = searchTodosId;
+  return next();
+}
+
 app.use(cors());
 app.use(express.json());
 
@@ -53,7 +68,22 @@ app.post('/todos', checkExistsUserAccount, (req, res) => {
     deadline: new Date(deadline),
     create_at: new Date(),
   });
+
   return res.status(200).json(searchUsername.todos);
+});
+
+app.put('/todos/:id', checkExistsUserAccount, verifyIdTodos, (req, res) => {
+  let { searchTodosId } = req;
+  const { title, deadline } = req.body;
+  // searchTodosId.title = title;
+  // searchTodosId.deadline = new Date(deadline);
+
+  searchTodosId = {
+    ...searchTodosId,
+    title: title,
+    deadline: new Date(deadline),
+  };
+  res.status(200).json(searchTodosId);
 });
 
 module.exports = app;
