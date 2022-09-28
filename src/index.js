@@ -25,7 +25,7 @@ function checkExistsUserAccount(req, res, next) {
   return next();
 }
 
-function verifyIdTodos(req, res, next) {
+function verifyTodoId(req, res, next) {
   const { username } = req.headers;
   const { id } = req.params;
 
@@ -72,7 +72,7 @@ app.post('/todos', checkExistsUserAccount, (req, res) => {
   return res.status(200).json(searchUsername.todos);
 });
 
-app.put('/todos/:id', checkExistsUserAccount, verifyIdTodos, (req, res) => {
+app.put('/todos/:id', checkExistsUserAccount, verifyTodoId, (req, res) => {
   let { searchTodosId } = req;
   const { title, deadline } = req.body;
   // searchTodosId.title = title;
