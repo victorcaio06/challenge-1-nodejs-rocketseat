@@ -105,4 +105,10 @@ app.delete('/todos/:id', checkExistsUserAccount, (req, res) => {
   return res.status(204).send();
 });
 
+app.patch('/users/:id', checkExistsUserAccount, (req, res) => {
+  const { searchUsername } = req;
+  searchUsername.pro = !searchUsername.pro;
+  return res.status(204).send();
+});
+
 module.exports = app;
