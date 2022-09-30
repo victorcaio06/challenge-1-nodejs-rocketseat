@@ -49,7 +49,7 @@ app.get('/getAll', (req, res) => {
 
 app.post('/users', checkValidAccount, (req, res) => {
   const { name, username } = req.body;
-  users.push({ _id: uuidv4(), name, username, todos: [] });
+  users.push({ _id: uuidv4(), name, username, pro: false, todos: [] });
   return res.status(201).send();
 });
 
@@ -99,7 +99,7 @@ app.patch(
 );
 
 app.delete('/todos/:id', checkExistsUserAccount, (req, res) => {
-  const {searchUsername} = req;
+  const { searchUsername } = req;
   users.splice(searchUsername, 1);
 
   return res.status(204).send();
