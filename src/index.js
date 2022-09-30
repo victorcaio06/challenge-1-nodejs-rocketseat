@@ -19,7 +19,7 @@ function checkExistsUserAccount(req, res, next) {
   const { username } = req.headers;
   const searchUsername = users.find((users) => users.username === username);
   if (!searchUsername) {
-    return res.status(400).send({ error: 'Account not found' });
+    return res.status(404).send({ error: 'Account not found' });
   }
   req.searchUsername = searchUsername;
   return next();
