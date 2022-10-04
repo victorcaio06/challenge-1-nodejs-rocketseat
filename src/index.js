@@ -40,6 +40,11 @@ function verifyTodoId(req, res, next) {
   return next();
 }
 
+function checksCreateTodosUserAvailability(req, res, next) {
+  const { username } = req.headers;
+  
+}
+
 app.use(cors());
 app.use(express.json());
 
