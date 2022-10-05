@@ -40,9 +40,12 @@ function verifyTodoId(req, res, next) {
   return next();
 }
 
-function checksCreateTodosUserAvailability(req, res, next) {
-  const { username } = req.headers;
-  
+function checksCreateTodosUserAvailability({ searchUsername }, res, next) {
+  if (searchUsername.todos.length >= 10 && searchUsername.pro === false)
+    return res
+      .status(403)
+      .json({ error: 'Creation limit reaching from the free plan' });
+  return next();
 }
 
 app.use(cors());
@@ -63,19 +66,24 @@ app.get('/todos', checkExistsUserAccount, (req, res) => {
   return res.send(searchUsername.todos);
 });
 
-app.post('/todos', checkExistsUserAccount, (req, res) => {
-  const { searchUsername } = req;
-  const { title, deadline } = req.body;
-  searchUsername.todos.push({
-    id: uuidv4(),
-    title,
-    done: false,
-    deadline: new Date(deadline),
-    create_at: new Date(),
-  });
+app.post(
+  '/todos',
+  checkExistsUserAccount,
+  checksCreateTodosUserAvailability,
+  (req, res) => {
+    const { searchUsername } = req;
+    const { title, deadline } = req.body;
+    searchUsername.todos.push({
+      id: uuidv4(),
+      title,
+      done: false,
+      deadline: new Date(deadline),
+      create_at: new Date(),
+    });
 
-  return res.status(200).json(searchUsername.todos);
-});
+    return res.status(200).json(searchUsername.todos);
+  }
+);
 
 app.put('/todos/:id', checkExistsUserAccount, verifyTodoId, (req, res) => {
   let { searchTodosId } = req;
